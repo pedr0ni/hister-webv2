@@ -1,6 +1,10 @@
 import { Container, makeStyles, Table, TableBody, Paper, TableCell, TableContainer, TableHead, TableRow, Typography, Divider, Button } from '@material-ui/core'
+import { Delete } from '@material-ui/icons';
 import { Skeleton } from '@material-ui/lab';
 import React from 'react'
+import { useHistory } from 'react-router-dom';
+import { User } from '../models/User';
+import UserService from '../services/UserService';
 
 
 const useStyles = makeStyles({
@@ -16,23 +20,26 @@ const useStyles = makeStyles({
     }
 });
 
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 export default function UsersScreen() {
+    const classes = useStyles();
+    const history = useHistory()
 
+    const [users, setUsers] = React.useState<Array<User>>([])
     const [loading, setLoading] = React.useState(true)
 
-    const classes = useStyles();
+    React.useEffect(() => { 
+        loadData()
+    }, [])
+
+    const loadData = async () => {
+        const response = await UserService.listAll()
+
+        if (response) {
+            setUsers(response.data)
+        }
+
+        setLoading(false)
+    }
 
     return (
         <Container>
@@ -57,23 +64,21 @@ export default function UsersScreen() {
                         <Table className={classes.table} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Dessert (100g serving)</TableCell>
-                                    <TableCell align="right">Calories</TableCell>
-                                    <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                                    <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                                    <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                                    <TableCell>#ID</TableCell>
+                                    <TableCell>Nome</TableCell>
+                                    <TableCell>Email</TableCell>
+                                    <TableCell>Data de Nascimento</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rows.map((row) => (
-                                    <TableRow key={row.name}>
+                                {users.map((row) => (
+                                    <TableRow key={row.name} onClick={() => history.push(`/users/detail/${row._id}`)}>
                                         <TableCell component="th" scope="row">
-                                            {row.name}
+                                            {row._id}
                                         </TableCell>
-                                        <TableCell align="right">{row.calories}</TableCell>
-                                        <TableCell align="right">{row.fat}</TableCell>
-                                        <TableCell align="right">{row.carbs}</TableCell>
-                                        <TableCell align="right">{row.protein}</TableCell>
+                                        <TableCell>{row.name}</TableCell>
+                                        <TableCell>{row.email}</TableCell>
+                                        <TableCell>{row.birth}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

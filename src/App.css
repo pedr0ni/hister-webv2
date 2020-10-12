@@ -64,3 +64,22 @@
 .md-subtitle {
   color: #757575  ;
 }
+
+.md-textfield {
+  width: 500px;
+  margin: 20px 0 !important;
+}
+
+.input-holder {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.form-footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
