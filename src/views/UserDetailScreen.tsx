@@ -3,6 +3,8 @@ import { Delete, Save } from '@material-ui/icons'
 import { Skeleton } from '@material-ui/lab'
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { ConfirmDialog } from '../components/ConfirmDialog'
+import { TemporaryBackdrop } from '../components/TemporaryBackdrop'
 import { User } from '../models/User'
 import UserService from '../services/UserService'
 
@@ -13,6 +15,8 @@ export default function UserDetailScreen() {
     }>()
     const [user, setUser] = React.useState<User>()
     const [loading, setLoading] = React.useState(true)
+    const [backdrop, setBackdrop] = React.useState(false)
+    const [showDialog, setShowDialog] = React.useState(false)
 
     React.useEffect(() => {
         loadData()
@@ -28,8 +32,19 @@ export default function UserDetailScreen() {
         setLoading(false)
     }
 
+    const saveData = async () => {
+        setBackdrop(true)
+    }
+
+    const deleteUser = async () => {
+        setBackdrop(true)
+
+    }
+
     return (
         <Container>
+            <ConfirmDialog onReject={() => setShowDialog(false)} onConfirm={deleteUser} show={showDialog} title={`Remover ${user?.name}`} message="Você realmente deseja deletar esse usuário? Essa operação não pode ser desfeita." />
+            <TemporaryBackdrop loading={backdrop} />
             {
                 loading ? (
                     <Skeleton animation='wave' variant='text' height={80} width={280} />
@@ -49,11 +64,9 @@ export default function UserDetailScreen() {
             {
                 loading ? (
                     <div>
-                        <Skeleton animation='wave' variant='text' height={120} width='100%' />
-                        <Skeleton animation='wave' variant='text' height={120} width='100%' />
-                        <Skeleton animation='wave' variant='text' height={120} width='100%' />
-                        <Skeleton animation='wave' variant='text' height={120} width='100%' />
-                        <Skeleton animation='wave' variant='text' height={120} width='100%' />
+                        <Skeleton animation='wave' variant='text' height={100} width='100%' />
+                        <Skeleton animation='wave' variant='text' height={100} width='100%' />
+                        <Skeleton animation='wave' variant='text' height={100} width='100%' />
                     </div>
                 ) : (
                     <div>
@@ -62,37 +75,30 @@ export default function UserDetailScreen() {
                                 <Typography variant="subtitle1">
                                     Nome Completo:
                                 </Typography>
-                                <TextField className="md-textfield" id="outlined-basic" label="Nome Completo" variant="outlined" />
+                                <TextField value={user?.name} onChange={(event) => setUser({...user, name: event.target.value})} className="md-textfield" id="outlined-basic" label="Nome Completo" variant="outlined" />
                             </div>
 
                             <div className="input-holder">
                                 <Typography variant="subtitle1">
-                                    Nome Completo:
+                                    E-mail
                                 </Typography>
-                                <TextField className="md-textfield" id="outlined-basic" label="Nome Completo" variant="outlined" />
+                                <TextField value={user?.email} onChange={(event) => setUser({...user, email: event.target.value})} className="md-textfield" id="outlined-basic" label="Nome Completo" variant="outlined" />
                             </div>
 
                             <div className="input-holder">
                                 <Typography variant="subtitle1">
-                                    Nome Completo:
+                                    Data de Nascimento
                                 </Typography>
-                                <TextField className="md-textfield" id="outlined-basic" label="Nome Completo" variant="outlined" />
-                            </div>
-
-                            <div className="input-holder">
-                                <Typography variant="subtitle1">
-                                    Nome Completo:
-                                </Typography>
-                                <TextField className="md-textfield" id="outlined-basic" label="Nome Completo" variant="outlined" />
+                                <TextField value={user?.birth} onChange={(event) => setUser({...user, birth: event.target.value})} className="md-textfield" id="outlined-basic" label="Nome Completo" variant="outlined" />
                             </div>
                         </form>
 
                         <div className="form-footer">
-                        <Button color="primary" variant="contained" startIcon={<Save />}>
+                        <Button onClick={saveData} color="primary" variant="contained" startIcon={<Save />}>
                             Salvar
                         </Button>
 
-                        <Button color="secondary" variant="contained" startIcon={<Delete />}>
+                        <Button onClick={() => setShowDialog(true)} color="secondary" variant="contained" startIcon={<Delete />}>
                             Deletar
                         </Button>
                         </div>

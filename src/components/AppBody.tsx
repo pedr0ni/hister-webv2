@@ -15,7 +15,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Logo from '../assets/logo.png'
 import { useHistory } from 'react-router-dom'
-import { Home, ChevronLeft, ChevronRight, People, ImportContacts } from '@material-ui/icons'
+import { Home, ChevronLeft, ChevronRight, People, ImportContacts, Mail, AccountBalance, ExitToApp, ShoppingCart } from '@material-ui/icons'
+import UserService from '../services/UserService'
 
 const drawerWidth = 240
 
@@ -85,7 +86,7 @@ const routes = [
 	{
 		label: 'Home',
 		icon: <Home />,
-		path: '/home'
+		path: '/'
 	},
 	{
 		label: 'Usuários',
@@ -96,6 +97,11 @@ const routes = [
 		label: 'Livros',
 		icon: <ImportContacts />,
 		path: '/books'
+	},
+	{
+		label: 'Pedidos',
+		icon: <ShoppingCart />,
+		path: '/orders'
 	}
 ]
 
@@ -112,6 +118,11 @@ export const AppBody : React.FC = ({children}) => {
 
 	const handleDrawerClose = () => {
 		setOpen(false)
+	}
+
+	const logout = () => {
+		UserService.logout()
+		history.push('/login')
 	}
 
 	return (
@@ -140,6 +151,7 @@ export const AppBody : React.FC = ({children}) => {
           			</Typography>
 				</Toolbar>
 			</AppBar>
+			
 			<Drawer
 				variant="permanent"
 				className={clsx(classes.drawer, {
@@ -172,6 +184,13 @@ export const AppBody : React.FC = ({children}) => {
 							)
 						})
 					}
+				</List>
+				<Divider />
+				<List>
+					<ListItem onClick={logout} button key="Sair">
+						<ListItemIcon><ExitToApp /></ListItemIcon>
+						<ListItemText primary="Sair" />
+					</ListItem>
 				</List>
 			</Drawer>
 			<main className={classes.content}>

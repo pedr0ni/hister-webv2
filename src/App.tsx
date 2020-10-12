@@ -3,6 +3,9 @@ import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import './App.css';
 
 import { AppBody } from './components/AppBody';
+import { PrivateRoute } from './components/PrivateRoute';
+import { DashboardScreen } from './views/DashboardScreen';
+import SignIn from './views/LoginScreen';
 import UserDetailScreen from './views/UserDetailScreen';
 import UsersScreen from './views/UsersScreen';
 
@@ -10,16 +13,26 @@ function App() {
 
 	return (
 		<BrowserRouter>
-			<AppBody>
-				<Switch>
-					<Route exact path='/users'>
+			<Switch>
+				<PrivateRoute exact path="/">
+					<AppBody>
+						<DashboardScreen />
+					</AppBody>
+				</PrivateRoute>
+				<PrivateRoute exact path="/users">
+					<AppBody>
 						<UsersScreen></UsersScreen>
-					</Route>
-					<Route exact path='/users/detail/:id'>
+					</AppBody>
+				</PrivateRoute>
+				<PrivateRoute exact path='/users/detail/:id'>
+					<AppBody>
 						<UserDetailScreen></UserDetailScreen>
-					</Route>
-				</Switch>
-			</AppBody>
+					</AppBody>
+				</PrivateRoute>
+				<Route exact path='/login'>
+					<SignIn></SignIn>
+				</Route>
+			</Switch>
 		</BrowserRouter>
 	);
 }

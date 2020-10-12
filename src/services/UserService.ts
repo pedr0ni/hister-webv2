@@ -22,7 +22,7 @@ class UserService extends BaseService {
         return Service.getWithDelay('/user')
     }
 
-    authenticate(body : object) {
+    authenticate(body : User) {
         return Service.postWithDelay('/user/authenticate', body)
     }
 
@@ -38,7 +38,7 @@ class UserService extends BaseService {
         return Service.getWithDelay(`/user/info/${id}`)
     }
 
-    async setToken(token: string) {
+    setToken(token: string) {
         localStorage.setItem('Authorization', token)
         Service.axios.defaults.headers = {
             Authorization: `Bearer ${token}`

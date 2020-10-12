@@ -1,8 +1,9 @@
-import { Container, makeStyles, Table, TableBody, Paper, TableCell, TableContainer, TableHead, TableRow, Typography, Divider, Button } from '@material-ui/core'
-import { Delete } from '@material-ui/icons';
+import { Container, makeStyles, Table, TableBody, Paper, TableCell, TableContainer, TableHead, TableRow, Typography, Divider, Button, IconButton } from '@material-ui/core'
+import { Create, Delete } from '@material-ui/icons';
 import { Skeleton } from '@material-ui/lab';
 import React from 'react'
 import { useHistory } from 'react-router-dom';
+import { Heading } from '../components/Heading';
 import { User } from '../models/User';
 import UserService from '../services/UserService';
 
@@ -43,18 +44,12 @@ export default function UsersScreen() {
 
     return (
         <Container>
-            <Typography variant="h6" className='md-title'>
-                Lista de Usuários
-            </Typography>
-            <Typography className='md-subtitle' variant="subtitle1">
-                Aqui você tem informações sobre todos os usuários do aplicativo.
-            </Typography>
 
-            <Button className={classes.button} variant="contained" color="primary">
-                Criar usuário
-            </Button>
-
-            <Divider />
+            <Heading title="Lista de Usuários" description="Aqui você tem informações sobre todos os usuários do aplicativo.">
+                <Button className={classes.button} variant="contained" color="primary">
+                    Criar usuário
+                </Button>
+            </Heading>
 
             {
                 loading ? (
@@ -68,17 +63,19 @@ export default function UsersScreen() {
                                     <TableCell>Nome</TableCell>
                                     <TableCell>Email</TableCell>
                                     <TableCell>Data de Nascimento</TableCell>
+                                    <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {users.map((row) => (
-                                    <TableRow key={row.name} onClick={() => history.push(`/users/detail/${row._id}`)}>
+                                    <TableRow key={row.name}>
                                         <TableCell component="th" scope="row">
                                             {row._id}
                                         </TableCell>
                                         <TableCell>{row.name}</TableCell>
                                         <TableCell>{row.email}</TableCell>
                                         <TableCell>{row.birth}</TableCell>
+                                        <TableCell><IconButton onClick={() => history.push(`/users/detail/${row._id}`)}><Create /></IconButton></TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
