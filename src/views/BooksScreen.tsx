@@ -4,15 +4,16 @@ import { Skeleton } from '@material-ui/lab';
 import React from 'react'
 import { useHistory } from 'react-router-dom';
 import { Heading } from '../components/Heading';
+import { Book } from '../models/Book';
 import { User } from '../models/User';
-import UserService from '../services/UserService';
+import BookService from '../services/BookService';
 import { useListingStyles } from '../styles/ListingStyles';
 
-export default function UsersScreen() {
+export default function BooksScreen() {
     const classes = useListingStyles()
     const history = useHistory()
 
-    const [users, setUsers] = React.useState<Array<User>>([])
+    const [books, setBooks] = React.useState<Array<Book>>([])
     const [loading, setLoading] = React.useState(true)
 
     React.useEffect(() => { 
@@ -20,10 +21,10 @@ export default function UsersScreen() {
     }, [])
 
     const loadData = async () => {
-        const response = await UserService.listAll()
+        const response = await BookService.listAll()
 
         if (response) {
-            setUsers(response.data)
+            setBooks(response.data.books)
         }
 
         setLoading(false)
@@ -32,9 +33,9 @@ export default function UsersScreen() {
     return (
         <Container>
 
-            <Heading title="Lista de Usuários" description="Aqui você tem informações sobre todos os usuários do aplicativo.">
-                <Button onClick={() => history.push('/users/create')} className={classes.button} variant="contained" color="primary">
-                    Criar usuário
+            <Heading title="Lista de Livros" description="Aqui você tem informações sobre todos os livros do aplicativo.">
+                <Button onClick={() => history.push('/books/create')} className={classes.button} variant="contained" color="primary">
+                    Criar livro
                 </Button>
             </Heading>
 
@@ -47,22 +48,22 @@ export default function UsersScreen() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>#ID</TableCell>
-                                    <TableCell>Nome</TableCell>
-                                    <TableCell>Email</TableCell>
-                                    <TableCell>Data de Nascimento</TableCell>
+                                    <TableCell>Titulo</TableCell>
+                                    <TableCell>Autores</TableCell>
+                                    <TableCell>Avaliação</TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {users.map((row) => (
+                                {books.map((row) => (
                                     <TableRow key={row._id}>
                                         <TableCell component="th" scope="row">
                                             {row._id}
                                         </TableCell>
-                                        <TableCell>{row.name}</TableCell>
-                                        <TableCell>{row.email}</TableCell>
-                                        <TableCell>{row.birth}</TableCell>
-                                        <TableCell><IconButton onClick={() => history.push(`/users/detail/${row._id}`)}><Create /></IconButton></TableCell>
+                                        <TableCell>{row.title}</TableCell>
+                                        <TableCell>{row.authors}</TableCell>
+                                        <TableCell>{row.average_rating}</TableCell>
+                                        <TableCell><IconButton onClick={() => history.push(`/books/detail/${row._id}`)}><Create /></IconButton></TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

@@ -18,16 +18,16 @@ class UserService extends BaseService {
             }
     }
 
+    create(body: User) {
+        return Service.postWithDelay('/user/register', body)
+    }
+
     listAll() {
         return Service.getWithDelay('/user')
     }
 
-    authenticate(body : User) {
+    authenticate(body: User) {
         return Service.postWithDelay('/user/authenticate', body)
-    }
-
-    register(body : object) {
-        return Service.postWithDelay('/user/register', body)
     }
 
     info () {
@@ -35,7 +35,7 @@ class UserService extends BaseService {
     }
 
     infoById(id: string) {
-        return Service.getWithDelay(`/user/info/${id}`)
+        return Service.getWithDelay(`/user/findById/${id}`)
     }
 
     setToken(token: string) {

@@ -3,22 +3,22 @@ import { Done } from '@material-ui/icons'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { TemporaryBackdrop } from '../components/TemporaryBackdrop'
-import { User } from '../models/User'
-import UserService from '../services/UserService'
+import { Book } from '../models/Book'
+import BookService from '../services/BookService'
 
-export default function UserCreateScreen() {
+export default function BookCreateScreen() {
 
     const history = useHistory()
 
-    const [user, setUser] = React.useState<User>()
+    const [book, setBook] = React.useState<Book>()
     const [backdrop, setBackdrop] = React.useState(false)
 
-    const createUser = async () => {
+    const createBook = async () => {
         setBackdrop(true)
-        const response = await UserService.create(user!)
+        const response = await BookService.create(book!)
 
         if (response) {
-            history.push('/users')
+            history.push('/books')
         }
         
         setBackdrop(false)
@@ -28,10 +28,10 @@ export default function UserCreateScreen() {
         <Container>
             <TemporaryBackdrop loading={backdrop} />
             <Typography variant="h6" className='md-title'>
-                Novo Usuário
+                Novo Livro
             </Typography>
             <Typography className='md-subtitle' variant="subtitle1">
-                Cadastre um novo usuário do aplicativo/administrador
+                Cadastre um novo livro para o aplicativo
             </Typography>
 
             <Divider />
@@ -39,38 +39,39 @@ export default function UserCreateScreen() {
                 <form noValidate autoComplete="off">
                     <div className="input-holder">
                         <Typography variant="subtitle1">
-                            Nome Completo:
+                            Titulo
                         </Typography>
-                        <TextField value={user?.name} onChange={(event) => setUser({...user, name: event.target.value})} className="md-textfield" id="outlined-basic" label="John Doe" variant="outlined" />
+                        <TextField value={book?.title} onChange={(event) => setBook({...book, title: event.target.value})} className="md-textfield" id="outlined-basic" label="Harry Potter" variant="outlined" />
                     </div>
 
                     <div className="input-holder">
                         <Typography variant="subtitle1">
-                            E-mail
+                            Autores
                         </Typography>
-                        <TextField value={user?.email} onChange={(event) => setUser({...user, email: event.target.value})} className="md-textfield" id="outlined-basic" label="john.doe@example.com" variant="outlined" />
+                        <TextField value={book?.authors} onChange={(event) => setBook({...book, authors: event.target.value})} className="md-textfield" id="outlined-basic" label="J.K Rowling" variant="outlined" />
                     </div>
 
                     <div className="input-holder">
                         <Typography variant="subtitle1">
-                            Senha
+                            Editora
                         </Typography>
-                        <TextField type="password" value={user?.password} onChange={(event) => setUser({...user, password: event.target.value})} className="md-textfield" id="outlined-basic" label="Senha" variant="outlined" />
+                        <TextField value={book?.publisher} onChange={(event) => setBook({...book, publisher: event.target.value})} className="md-textfield" id="outlined-basic" label="Editora Abril" variant="outlined" />
                     </div>
 
                     <div className="input-holder">
                         <Typography variant="subtitle1">
-                            Data de Nascimento
+                            Data de Publicação
                         </Typography>
-                        <TextField value={user?.birth} onChange={(event) => setUser({...user, birth: event.target.value})} className="md-textfield" id="outlined-basic" label="18/11/1999" variant="outlined" />
+                        <TextField value={book?.publication_date} onChange={(event) => setBook({...book, publication_date: event.target.value})} className="md-textfield" id="outlined-basic" label="26/06/1997" variant="outlined" />
                     </div>
+
+                    
                 </form>
 
                 <div className="form-footer">
-                <Button onClick={createUser} color="primary" variant="contained" startIcon={<Done />}>
-                    Cadastrar
-                </Button>
-
+                    <Button onClick={createBook} color="primary" variant="contained" startIcon={<Done />}>
+                        Cadastrar
+                    </Button>
                 </div>
             </div>
               

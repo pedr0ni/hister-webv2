@@ -83,3 +83,9 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.md-fab {
+  position: fixed !important;
+  bottom: 30px;
+  right: 30px;
+}

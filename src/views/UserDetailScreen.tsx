@@ -1,5 +1,5 @@
-import { Button, Container, Divider, TextField, Typography } from '@material-ui/core'
-import { Delete, Save } from '@material-ui/icons'
+import { Button, Container, Divider, Fab, TextField, Typography } from '@material-ui/core'
+import { Delete, Edit, Save } from '@material-ui/icons'
 import { Skeleton } from '@material-ui/lab'
 import React from 'react'
 import { useParams } from 'react-router-dom'
@@ -25,6 +25,8 @@ export default function UserDetailScreen() {
     const loadData = async () => {
         const response = await UserService.infoById(params.id)
 
+        console.log(response)
+
         if (response) {
             setUser(response.data)
         }
@@ -43,15 +45,23 @@ export default function UserDetailScreen() {
 
     return (
         <Container>
+
             <ConfirmDialog onReject={() => setShowDialog(false)} onConfirm={deleteUser} show={showDialog} title={`Remover ${user?.name}`} message="Você realmente deseja deletar esse usuário? Essa operação não pode ser desfeita." />
+            
             <TemporaryBackdrop loading={backdrop} />
             {
                 loading ? (
                     <Skeleton animation='wave' variant='text' height={80} width={280} />
                 ) : (
-                    <Typography variant="h6" className='md-title'>
-                        {user?.name}
-                    </Typography>
+                    <>
+                        <Fab className="md-fab" onClick={() => setShowDialog(true)} color="secondary" aria-label="edit">
+                            <Delete />
+                        </Fab>
+
+                        <Typography variant="h6" className='md-title'>
+                            {user?.name}
+                        </Typography>
+                    </>
                 )
             }
 
@@ -75,32 +85,28 @@ export default function UserDetailScreen() {
                                 <Typography variant="subtitle1">
                                     Nome Completo:
                                 </Typography>
-                                <TextField value={user?.name} onChange={(event) => setUser({...user, name: event.target.value})} className="md-textfield" id="outlined-basic" label="Nome Completo" variant="outlined" />
+                                <TextField value={user?.name} onChange={(event) => setUser({...user, name: event.target.value})} className="md-textfield" id="outlined-basic" label="Matheus Pedroni" variant="outlined" />
                             </div>
 
                             <div className="input-holder">
                                 <Typography variant="subtitle1">
                                     E-mail
                                 </Typography>
-                                <TextField value={user?.email} onChange={(event) => setUser({...user, email: event.target.value})} className="md-textfield" id="outlined-basic" label="Nome Completo" variant="outlined" />
+                                <TextField value={user?.email} onChange={(event) => setUser({...user, email: event.target.value})} className="md-textfield" id="outlined-basic" label="matheus@hister.com" variant="outlined" />
                             </div>
 
                             <div className="input-holder">
                                 <Typography variant="subtitle1">
                                     Data de Nascimento
                                 </Typography>
-                                <TextField value={user?.birth} onChange={(event) => setUser({...user, birth: event.target.value})} className="md-textfield" id="outlined-basic" label="Nome Completo" variant="outlined" />
+                                <TextField value={user?.birth} onChange={(event) => setUser({...user, birth: event.target.value})} className="md-textfield" id="outlined-basic" label="18/11/1999" variant="outlined" />
                             </div>
                         </form>
 
                         <div className="form-footer">
-                        <Button onClick={saveData} color="primary" variant="contained" startIcon={<Save />}>
-                            Salvar
-                        </Button>
-
-                        <Button onClick={() => setShowDialog(true)} color="secondary" variant="contained" startIcon={<Delete />}>
-                            Deletar
-                        </Button>
+                            <Button onClick={saveData} color="primary" variant="contained" startIcon={<Save />}>
+                                Salvar
+                            </Button>
                         </div>
                     </div>
                 )

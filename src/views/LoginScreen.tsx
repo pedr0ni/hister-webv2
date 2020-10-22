@@ -12,10 +12,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Backdrop, CircularProgress } from '@material-ui/core';
+import { Backdrop, CircularProgress, Fade, Grow } from '@material-ui/core';
 import UserService from '../services/UserService';
 import { useHistory } from 'react-router-dom';
 import { TemporaryBackdrop } from '../components/TemporaryBackdrop';
+import { Alert } from '@material-ui/lab';
 
 function Copyright() {
 	return (
@@ -57,10 +58,12 @@ export default function SignIn() {
 	const [email, setEmail] = React.useState('')
 	const [password, setPassword] = React.useState('')
 	const [loading, setLoading] = React.useState(false)
+	const [error, setError] = React.useState<string | undefined>(undefined)
 
 	const login = async () => {
 		setLoading(true)
-
+		setError(undefined)
+		
 		const response = await UserService.authenticate({
 			email, password
 		})
@@ -69,7 +72,7 @@ export default function SignIn() {
 			UserService.setToken(response.data.token)
 			history.push('/users')
 		} else {
-			console.log('Ops...')
+			setError('Usuário ou senha invalido(s)...')
 		}
 
 		setLoading(false)
@@ -86,6 +89,10 @@ export default function SignIn() {
 				<Typography component="h1" variant="h5">
 					Entrar
         		</Typography>
+
+				<Grow in={error != undefined}>
+					<Alert style={{width: '100%', margin: '10px 0'}} severity="error">{ error }</Alert>
+				</Grow>
 				<form className={classes.form} noValidate>
 					<TextField
 						variant="outlined"

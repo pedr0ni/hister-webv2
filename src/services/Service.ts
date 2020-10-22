@@ -59,6 +59,20 @@ export default {
         })
     },
 
+    putWithDelay: (path: string, body: object) : Promise<AxiosResponse> => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                instance.put(path, body)
+                    .then(response => resolve(response))
+                    .catch(error => {
+                        handleError(error)
+                        
+                        resolve(undefined)
+                    })
+            }, delay)
+        })
+    },
+
     axios: instance
 }
 
