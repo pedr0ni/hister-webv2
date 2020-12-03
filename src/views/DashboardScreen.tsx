@@ -1,6 +1,7 @@
 import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core'
 import React from 'react'
 import { Heading } from '../components/Heading'
+import DashboardService from '../services/DashboardService'
 
 const iFrame: React.CSSProperties = {
     background: '#FFF',
@@ -10,7 +11,29 @@ const iFrame: React.CSSProperties = {
     width: '100%'
 }
 
+interface Dashboard {
+    users: Number,
+    books: Number,
+    orders: Number
+}
+
 export const DashboardScreen : React.FC = () => {
+
+    const [dashboard, setDashboard] = React.useState<Dashboard>()
+
+    React.useEffect(() => {
+
+        fetch()
+
+    }, [])
+
+    const fetch = async () => {
+        const response = await DashboardService.get()
+        if (response) {
+            setDashboard(response.data)
+        }
+    }
+ 
     return (
         <div>
             <Heading title="Hister" description="O hister é uma plataforma gratuita para consumo de livros online.
@@ -21,7 +44,7 @@ export const DashboardScreen : React.FC = () => {
                     <Card>
                         <CardContent>
                             <Typography variant="h5" component="h2">
-                                5327
+                                { dashboard?.users }
                             </Typography>
                             <Typography color="textSecondary">
                                 Usuários
@@ -36,7 +59,7 @@ export const DashboardScreen : React.FC = () => {
                     <Card>
                         <CardContent>
                             <Typography variant="h5" component="h2">
-                                5327
+                            { dashboard?.books }
                             </Typography>
                             <Typography color="textSecondary">
                                 Livros
@@ -52,7 +75,7 @@ export const DashboardScreen : React.FC = () => {
                     <Card>
                         <CardContent>
                             <Typography variant="h5" component="h2">
-                                5327
+                            { dashboard?.orders }
                             </Typography>
                             <Typography color="textSecondary">
                                 Pedidos
